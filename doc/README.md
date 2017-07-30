@@ -1,4 +1,4 @@
-Delegating Authentication and Authorization by Identity Brokering
+Authentication Delegation Mechanism Design Memo Takashi Norimatsu(@tnorimat), Hitachi,Ltd.
 ===
 
 # 1. Preface
