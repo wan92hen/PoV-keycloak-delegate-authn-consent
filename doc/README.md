@@ -1,4 +1,4 @@
-Authentication Delegation Mechanism Design Memo Takashi Norimatsu(@tnorimat), Hitachi,Ltd.
+Authentication and Authorization Delegation Mechanism Design Memo Takashi Norimatsu(@tnorimat), Hitachi,Ltd.
 ===
 
 # 1. Preface
