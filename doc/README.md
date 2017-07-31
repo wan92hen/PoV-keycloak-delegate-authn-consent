@@ -22,7 +22,7 @@ In this memo, the terms defined in [NIST SP 800-63C] are used.
 
 [OWASP] [Session Management Cheat Sheet](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet)
 
-## 1.2. About Delegating Authentication and Consent
+## 1.2. About Delegating Authentication and Authorization
 In this context, Delegating Authentication and Authorization stands for delegating authentication and authorization to an external server (call it External IdP subsequently) on behalf of keycloak's browser-based authentication mechanism. It might be said that it be the variant of Identity Brokering mentioned in section 3.13 of [keycloak] except for the following points.
 - Not using standard protocols for Identity Federation such as OpenID Connect and SAMLv2. But its concept is similar to 5.1.3 SP-Initiated SSO: POST/Artifact Bindings of [SAMLv2].
 - Authorization is also delegated. 
@@ -376,7 +376,7 @@ In general, there seemed to take extra precaution because artifacts are transmit
 + Redirection URI to which an artifact is conveyed MUST be specified by the external IdP.
 
 ### 7.3.4. Assertion Reference Substitution
-Besides assertion reference, if an attacker intercept a victim's login session information (aka code issued by keycloak's endpoint in Front Channel) and the assertion reference, the attacker impersonate the victim by accessing keycloak's login endpoint in Front Channel with victim's session information(code) and assertion reference.
+Besides assertion reference, if an attacker intercepts a victim's login session information (aka code issued by keycloak's endpoint in Front Channel) and the assertion reference, the attacker impersonate the victim by accessing keycloak's login endpoint in Front Channel with victim's session information(code) and assertion reference.
 
 In order to prevent this impersonation, several methods are developed.
 1. Token Binding using TLS layer's exported keying material derived from its master secret mentioned in [TokenBind]
