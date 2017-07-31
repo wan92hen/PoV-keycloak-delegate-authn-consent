@@ -35,26 +35,26 @@ import org.keycloak.services.messages.Messages;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class DelegateAuthnIdentityProvider<C extends DelegateAuthnIdentityProviderConfig> extends AbstractIdentityProvider<C> {
-	protected static final Logger logger = Logger.getLogger(DelegateAuthnIdentityProvider.class);
-	
-	// Notes: the following literals also must be used by the external IdP (namely part of this custom protocol)
-	protected static final String ACCESS_DENIED = "access_denied";
-	protected static final String PROVIDER_PARAMETER_ASSERTION_REFERENCE = "artifact";
-	protected static final String PROVIDER_PARAMETER_STATE = "state";
-	protected static final String PROVIDER_PARAMETER_ERROR = "error";	
-	protected static final String PROVIDER_PARAMETER_REDIRECT_URI = "redirect_uri";	
-	protected static final String PROVIDER_PARAMETER_USERID = "userid";	
-	protected static final String PROVIDER_PARAMETER_USERNAME = "username";		
+    protected static final Logger logger = Logger.getLogger(DelegateAuthnIdentityProvider.class);
+    
+    // Notes: the following literals also must be used by the external IdP (namely part of this custom protocol)
+    protected static final String ACCESS_DENIED = "access_denied";
+    protected static final String PROVIDER_PARAMETER_ASSERTION_REFERENCE = "artifact";
+    protected static final String PROVIDER_PARAMETER_STATE = "state";
+    protected static final String PROVIDER_PARAMETER_ERROR = "error";    
+    protected static final String PROVIDER_PARAMETER_REDIRECT_URI = "redirect_uri";    
+    protected static final String PROVIDER_PARAMETER_USERID = "userid";    
+    protected static final String PROVIDER_PARAMETER_USERNAME = "username";        
 
-	public DelegateAuthnIdentityProvider(KeycloakSession session, C config) {
-		super(session, config);
-	}
+    public DelegateAuthnIdentityProvider(KeycloakSession session, C config) {
+        super(session, config);
+    }
 
     @Override
     public Object callback(RealmModel realm, AuthenticationCallback callback, EventBuilder event) {
         return new Endpoint(callback, realm, event);
     }
-	
+    
     @Override
     public Response performLogin(AuthenticationRequest request) {
         try {
@@ -64,35 +64,35 @@ public class DelegateAuthnIdentityProvider<C extends DelegateAuthnIdentityProvid
             return Response.status(302).location(authenticationUrl).build();
         } catch (Exception e) {
             throw new IdentityBrokerException("Could not create authentication request to External IdP.", e);
-        }    	
+        }        
     }
     
-	@Override
-	public Response retrieveToken(KeycloakSession session, FederatedIdentityModel identity) {
+    @Override
+    public Response retrieveToken(KeycloakSession session, FederatedIdentityModel identity) {
         return Response.ok(identity.getToken()).build();
-	}
+    }
     
     protected BrokeredIdentityContext getFederatedIdentity(String artifact) {
         try {
-        	String authHeader = "Basic " + encodeCredentials(getConfig().getClientId(), getConfig().getClientSecret());
-			JsonNode profile = JsonSimpleHttp.asJson(SimpleHttp.doPost(getConfig().getUserinfoEndpoint(), session)
-					.param(PROVIDER_PARAMETER_ASSERTION_REFERENCE, artifact)
-					.header(HttpHeaders.AUTHORIZATION, authHeader));
-			
-        	String userId = getJsonProperty(profile, PROVIDER_PARAMETER_USERID);
-        	BrokeredIdentityContext user = new BrokeredIdentityContext(userId);
-        	
+            String authHeader = "Basic " + encodeCredentials(getConfig().getClientId(), getConfig().getClientSecret());
+            JsonNode profile = JsonSimpleHttp.asJson(SimpleHttp.doPost(getConfig().getUserinfoEndpoint(), session)
+                    .param(PROVIDER_PARAMETER_ASSERTION_REFERENCE, artifact)
+                    .header(HttpHeaders.AUTHORIZATION, authHeader));
+            
+            String userId = getJsonProperty(profile, PROVIDER_PARAMETER_USERID);
+            BrokeredIdentityContext user = new BrokeredIdentityContext(userId);
+            
             if (getConfig().isStoreToken()) {
-            	user.setToken(profile.toString());
+                user.setToken(profile.toString());
             }
-        	
-        	// BrokeredIdentityContext's id(constructor) and username MUST NOT be null.
-        	user.setUsername(getJsonProperty(profile, PROVIDER_PARAMETER_USERNAME)); 
-			user.setIdpConfig(getConfig());
-			user.setIdp(this);
+            
+            // BrokeredIdentityContext's id(constructor) and username MUST NOT be null.
+            user.setUsername(getJsonProperty(profile, PROVIDER_PARAMETER_USERNAME)); 
+            user.setIdpConfig(getConfig());
+            user.setIdp(this);
 
-			AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
-			
+            AbstractJsonUserAttributeMapper.storeUserProfileForMapper(user, profile, getConfig().getAlias());
+            
             return user;
         } catch (Exception e) {
             throw new IdentityBrokerException("Could not fetch attributes from External IdP's userinfo endpoint.", e);
@@ -113,20 +113,20 @@ public class DelegateAuthnIdentityProvider<C extends DelegateAuthnIdentityProvid
      */
     protected String getJsonProperty(JsonNode jsonNode, String name) {
         if (jsonNode.has(name) && !jsonNode.get(name).isNull()) {
-        	  String s = jsonNode.get(name).asText();
-        	  if(s != null && !s.isEmpty())
-        	  		return s;
-        	  else
-      	  			return null;
+              String s = jsonNode.get(name).asText();
+              if(s != null && !s.isEmpty())
+                      return s;
+              else
+                        return null;
         }
         return null;
     }
 
     protected UriBuilder createAuthenticationUrl(AuthenticationRequest request) {
-    	UriBuilder builder = UriBuilder.fromUri(getConfig().getAuthenticationUri())
+        UriBuilder builder = UriBuilder.fromUri(getConfig().getAuthenticationUri())
                 .queryParam(PROVIDER_PARAMETER_STATE, request.getState().getEncodedState())
                 .queryParam(PROVIDER_PARAMETER_REDIRECT_URI, request.getRedirectUri());
-    	return builder;
+        return builder;
     }
     
     protected class Endpoint {
@@ -156,17 +156,17 @@ public class DelegateAuthnIdentityProvider<C extends DelegateAuthnIdentityProvid
         public Response authResponse(@QueryParam(PROVIDER_PARAMETER_ASSERTION_REFERENCE) String artifact,
                                      @QueryParam(PROVIDER_PARAMETER_STATE) String state,
                                      @QueryParam(PROVIDER_PARAMETER_ERROR) String error) {
-        	return processAuthReponse(state, artifact, error);
+            return processAuthReponse(state, artifact, error);
         }
         
         @POST
         public Response authResponsePOST(@Context HttpServletRequest request,
-    		                             @Context UriInfo uriInfo,
-    		                             MultivaluedMap<String, String> params) {
-        	String state = params.getFirst("state");
-        	String artifact = params.getFirst("artifact");
-        	String error = params.getFirst("error");
-        	return processAuthReponse(state, artifact, error);
+                                         @Context UriInfo uriInfo,
+                                         MultivaluedMap<String, String> params) {
+            String state = params.getFirst("state");
+            String artifact = params.getFirst("artifact");
+            String error = params.getFirst("error");
+            return processAuthReponse(state, artifact, error);
         }
         
         private Response processAuthReponse(String state, String artifact, String error) {
@@ -180,7 +180,7 @@ public class DelegateAuthnIdentityProvider<C extends DelegateAuthnIdentityProvid
                 }
             }
             try {
-            	// TODO : have to verify state and artifact values
+                // TODO : have to verify state and artifact values
                 if (state != null && artifact != null) {
                     BrokeredIdentityContext federatedIdentity = getFederatedIdentity(artifact);
                     federatedIdentity.setCode(state);
@@ -191,7 +191,7 @@ public class DelegateAuthnIdentityProvider<C extends DelegateAuthnIdentityProvid
             }
             event.event(EventType.LOGIN);
             event.error(Errors.IDENTITY_PROVIDER_LOGIN_FAILURE);
-            return ErrorPage.error(session, Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);       	
+            return ErrorPage.error(session, Messages.IDENTITY_PROVIDER_UNEXPECTED_ERROR);
         }
     }
 }

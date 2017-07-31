@@ -46,7 +46,7 @@ public class DelegateAuthnConsentAuthenticator implements Authenticator {
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
-    	
+        
         if (context.getUriInfo().getQueryParameters().containsKey(AdapterConstants.KC_IDP_HINT)) {
             String providerId = context.getUriInfo().getQueryParameters().getFirst(AdapterConstants.KC_IDP_HINT);
             if (providerId == null || providerId.equals("")) {
@@ -110,32 +110,32 @@ public class DelegateAuthnConsentAuthenticator implements Authenticator {
     }
 
     private void storeForwardedParameters(AuthenticationFlowContext context) {
-    	HttpRequest httpRequest = context.getHttpRequest();
-    	Map<String, String> config = context.getAuthenticatorConfig().getConfig();
-    	
-    	// .setNote() can only contains String. Therefore, read and put each item of forwarding parameters from loaded Properties.
+        HttpRequest httpRequest = context.getHttpRequest();
+        Map<String, String> config = context.getAuthenticatorConfig().getConfig();
+        
+        // .setNote() can only contains String. Therefore, read and put each item of forwarding parameters from loaded Properties.
         MultivaluedMap<String, String> queryParameters = httpRequest.getUri().getQueryParameters();
         List<String> fwdQueryParams = getForwardedParameters(config, DelegateAuthnConsentAuthenticatorFactory.getQueryParameterNameList());
         if (!fwdQueryParams.isEmpty()) storeForwardedParameters(context.getAuthenticationSession(), queryParameters, fwdQueryParams);
      
         MultivaluedMap<String, String> headerFields = httpRequest.getHttpHeaders().getRequestHeaders();
         List<String> fwdHttpHdrs = getForwardedParameters(config, DelegateAuthnConsentAuthenticatorFactory.getHttpHeaderNameList());
-        if (!fwdHttpHdrs.isEmpty()) storeForwardedParameters(context.getAuthenticationSession(), headerFields, fwdHttpHdrs);    	
+        if (!fwdHttpHdrs.isEmpty()) storeForwardedParameters(context.getAuthenticationSession(), headerFields, fwdHttpHdrs);        
     }
      
     private List<String> getForwardedParameters(Map<String, String> map, List<String> names) {
-    	List<String> list = new ArrayList<String>();
-    	for (String name : names) {
-    		if (map.containsKey(name)) list.add(map.get(name));
-    	}
-    	return list;
+        List<String> list = new ArrayList<String>();
+        for (String name : names) {
+            if (map.containsKey(name)) list.add(map.get(name));
+        }
+        return list;
     }
     
     private void storeForwardedParameters(AuthenticationSessionModel session, MultivaluedMap<String, String> params, List<String> fwdparams) {   
-    	for (String propertyName : fwdparams) {
-    		if (params.containsKey(propertyName)) {
-    			session.setClientNote(FWD_PREFIX + propertyName, params.getFirst(propertyName));
-    		}
-    	}
+        for (String propertyName : fwdparams) {
+            if (params.containsKey(propertyName)) {
+                session.setClientNote(FWD_PREFIX + propertyName, params.getFirst(propertyName));
+            }
+        }
     }
 }

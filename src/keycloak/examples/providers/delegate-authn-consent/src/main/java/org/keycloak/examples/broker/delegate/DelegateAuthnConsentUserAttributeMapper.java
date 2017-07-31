@@ -20,15 +20,15 @@ import org.keycloak.examples.broker.delegate.DelegateAuthnConsentIdentityProvide
 
 public class DelegateAuthnConsentUserAttributeMapper extends DelegateAuthnUserAttributeMapper {
 
-	private static final String[] cp = new String[] { DelegateAuthnConsentIdentityProviderFactory.PROVIDER_ID };
+    private static final String[] cp = new String[] { DelegateAuthnConsentIdentityProviderFactory.PROVIDER_ID };
 
-	@Override
-	public String[] getCompatibleProviders() {
-		return cp;
-	}
-	
-	@Override
-	public String getId() {
-		return "delegate-authn-consent-user-attribute-mapper";
-	}
+    @Override
+    public String[] getCompatibleProviders() {
+        return cp;
+    }
+    
+    @Override
+    public String getId() {
+        return "delegate-authn-consent-user-attribute-mapper";
+    }
 }

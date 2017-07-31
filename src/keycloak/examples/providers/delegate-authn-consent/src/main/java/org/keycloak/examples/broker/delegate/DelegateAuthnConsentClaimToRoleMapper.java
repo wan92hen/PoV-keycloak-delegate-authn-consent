@@ -49,31 +49,31 @@ public class DelegateAuthnConsentClaimToRoleMapper  extends AbstractIdentityProv
     }
 
     public static final String PROVIDER_ID = "delegate-authn-consent-role-idp-mapper";
-	
-	@Override
-	public List<ProviderConfigProperty> getConfigProperties() {
-        return configProperties;
-	}
     
-	@Override
-	public String getId() {
+    @Override
+    public List<ProviderConfigProperty> getConfigProperties() {
+        return configProperties;
+    }
+    
+    @Override
+    public String getId() {
         return PROVIDER_ID;
-	}
-	
-	@Override
-	public String[] getCompatibleProviders() {
+    }
+    
+    @Override
+    public String[] getCompatibleProviders() {
         return COMPATIBLE_PROVIDERS;
-	}
+    }
 
-	@Override
-	public String getDisplayCategory() {
+    @Override
+    public String getDisplayCategory() {
         return "Role Importer";
-	}
+    }
 
-	@Override
-	public String getDisplayType() {
+    @Override
+    public String getDisplayType() {
         return "Claim to Role";
-	}
+    }
 
     @Override
     public void importNewUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
@@ -84,9 +84,9 @@ public class DelegateAuthnConsentClaimToRoleMapper  extends AbstractIdentityProv
             user.grantRole(role);
         }
     }
-	
-	@Override
-	public void updateBrokeredUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
+    
+    @Override
+    public void updateBrokeredUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
         String roleName = mapperModel.getConfig().get(ConfigConstants.ROLE);
         RoleModel role = KeycloakModelUtils.getRoleFromString(realm, roleName);
         if (role == null) throw new IdentityBrokerException("Unable to find role: " + roleName);
@@ -95,13 +95,13 @@ public class DelegateAuthnConsentClaimToRoleMapper  extends AbstractIdentityProv
         } else {
             user.grantRole(role);
         }
-	}
+    }
 
-	@Override
-	public String getHelpText() {
+    @Override
+    public String getHelpText() {
         return "If a claim exists, grant the user the specified realm or application role.";
-	}
-	
+    }
+    
     protected boolean hasClaimValue(IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
         Object value = getClaimValue(mapperModel, context);
         String desiredValue = mapperModel.getConfig().get(CLAIM_VALUE);
@@ -144,7 +144,7 @@ public class DelegateAuthnConsentClaimToRoleMapper  extends AbstractIdentityProv
         } else if (value instanceof List) {
             List<?> list = (List<?>)value;
             for (Object val : list) {
-            	if (valueEquals(desiredValue, val)) return true;
+                if (valueEquals(desiredValue, val)) return true;
             }
         }
         return false;

@@ -4,9 +4,9 @@ import org.keycloak.models.IdentityProviderModel;
 
 public class DelegateAuthnIdentityProviderConfig extends IdentityProviderModel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public DelegateAuthnIdentityProviderConfig(IdentityProviderModel model) {
+    public DelegateAuthnIdentityProviderConfig(IdentityProviderModel model) {
         super(model);
     }
 

@@ -33,19 +33,19 @@ public class DelegateAuthnConsentAuthenticatorFactory implements AuthenticatorFa
     
     // NOTES: at first, try to use MultivaluedString by modifying theme/base/admin/resources/templetes/kc-provider-config.html but can not be reflected to admin console UI...
     
-	private static final String FW_QUERY_PARAMS_BASE = "forwarding.query.parameters";
-	private static final String FW_QUERY_PARAMS_LABEL = "Query Parameters to be forwarded to External IdP";
-	private static final String FW_QUERY_PARAMS_HELP = FW_QUERY_PARAMS_LABEL;
-	private static final int FW_QUERY_PARAMS_MAX = 5;
-	private static final String FW_HTTP_HEADERS_BASE = "forwarding.http.headers";	
-	private static final String FW_HTTP_HEADERS_LABEL = "HTTP Header Fields to be forwarded to External IdP";
-	private static final String FW_HTTP_HEADERS_HELP = FW_HTTP_HEADERS_LABEL;
-	private static final int FW_HTTP_HEADERS_MAX = 5;
+    private static final String FW_QUERY_PARAMS_BASE = "forwarding.query.parameters";
+    private static final String FW_QUERY_PARAMS_LABEL = "Query Parameters to be forwarded to External IdP";
+    private static final String FW_QUERY_PARAMS_HELP = FW_QUERY_PARAMS_LABEL;
+    private static final int FW_QUERY_PARAMS_MAX = 5;
+    private static final String FW_HTTP_HEADERS_BASE = "forwarding.http.headers";    
+    private static final String FW_HTTP_HEADERS_LABEL = "HTTP Header Fields to be forwarded to External IdP";
+    private static final String FW_HTTP_HEADERS_HELP = FW_HTTP_HEADERS_LABEL;
+    private static final int FW_HTTP_HEADERS_MAX = 5;
 
-	private static List<String> FW_QUERY_PARAMS = new ArrayList<>(FW_QUERY_PARAMS_MAX);
-	private static List<String> FW_HTTP_HEADERS = new ArrayList<>(FW_HTTP_HEADERS_MAX);
-	
-	protected static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES = {
+    private static List<String> FW_QUERY_PARAMS = new ArrayList<>(FW_QUERY_PARAMS_MAX);
+    private static List<String> FW_HTTP_HEADERS = new ArrayList<>(FW_HTTP_HEADERS_MAX);
+    
+    protected static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES = {
             AuthenticationExecutionModel.Requirement.ALTERNATIVE, AuthenticationExecutionModel.Requirement.DISABLED
     };
     
@@ -53,27 +53,27 @@ public class DelegateAuthnConsentAuthenticatorFactory implements AuthenticatorFa
 
     static {
         configProperties.add(new ProviderConfigProperty(DEFAULT_PROVIDER, "Default Delegating Authentication and Consent Identity Provider", 
-        		"To automatically redirect to an identity provider set to the alias of the delegating authentication and consent identity provider.", 
-        		ProviderConfigProperty.STRING_TYPE, null));
+                "To automatically redirect to an identity provider set to the alias of the delegating authentication and consent identity provider.", 
+                ProviderConfigProperty.STRING_TYPE, null));
 
         for(int i = 1; i <= FW_QUERY_PARAMS_MAX; i++) {
-        	String name = FW_QUERY_PARAMS_BASE + "." + i;
-        	FW_QUERY_PARAMS.add(name);
-        	configProperties.add(new ProviderConfigProperty(name, FW_QUERY_PARAMS_LABEL + " #" + i, FW_QUERY_PARAMS_HELP + " #" + i, ProviderConfigProperty.STRING_TYPE, null));
+            String name = FW_QUERY_PARAMS_BASE + "." + i;
+            FW_QUERY_PARAMS.add(name);
+            configProperties.add(new ProviderConfigProperty(name, FW_QUERY_PARAMS_LABEL + " #" + i, FW_QUERY_PARAMS_HELP + " #" + i, ProviderConfigProperty.STRING_TYPE, null));
         }
         for(int i = 1; i <= FW_HTTP_HEADERS_MAX; i++) {
-        	String name = FW_HTTP_HEADERS_BASE + "." + i;
-        	FW_HTTP_HEADERS.add(name);
-        	configProperties.add(new ProviderConfigProperty(name, FW_HTTP_HEADERS_LABEL + " #" + i, FW_HTTP_HEADERS_HELP + " #" + i, ProviderConfigProperty.STRING_TYPE, null));        
+            String name = FW_HTTP_HEADERS_BASE + "." + i;
+            FW_HTTP_HEADERS.add(name);
+            configProperties.add(new ProviderConfigProperty(name, FW_HTTP_HEADERS_LABEL + " #" + i, FW_HTTP_HEADERS_HELP + " #" + i, ProviderConfigProperty.STRING_TYPE, null));        
         }
     }
     
     static List<String> getQueryParameterNameList() {
-    	return FW_QUERY_PARAMS;
+        return FW_QUERY_PARAMS;
     }
     
     static List<String> getHttpHeaderNameList() {
-    	return FW_HTTP_HEADERS;
+        return FW_HTTP_HEADERS;
     }
     
     @Override

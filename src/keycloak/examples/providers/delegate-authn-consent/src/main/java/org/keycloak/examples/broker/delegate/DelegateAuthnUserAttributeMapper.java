@@ -28,28 +28,28 @@ import org.keycloak.models.UserModel;
 
 public class DelegateAuthnUserAttributeMapper extends AbstractJsonUserAttributeMapper {
 
-	private static final String[] cp = new String[] { DelegateAuthnIdentityProviderFactory.PROVIDER_ID };
+    private static final String[] cp = new String[] { DelegateAuthnIdentityProviderFactory.PROVIDER_ID };
 
-	@Override
-	public String[] getCompatibleProviders() {
-		return cp;
-	}
+    @Override
+    public String[] getCompatibleProviders() {
+        return cp;
+    }
 
-	@Override
-	public String getId() {
-		return "delegate-authn-user-attribute-mapper";
-	}
-	
-	@Override
-	public void updateBrokeredUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
-		String attribute = mapperModel.getConfig().get(CONF_USER_ATTRIBUTE);
+    @Override
+    public String getId() {
+        return "delegate-authn-user-attribute-mapper";
+    }
+    
+    @Override
+    public void updateBrokeredUser(KeycloakSession session, RealmModel realm, UserModel user, IdentityProviderMapperModel mapperModel, BrokeredIdentityContext context) {
+        String attribute = mapperModel.getConfig().get(CONF_USER_ATTRIBUTE);
         List<String> current = user.getAttribute(attribute);
         // fetch attribute values as list
-		List<String> values = (List<String>) context.getContextData().get(Constants.USER_ATTRIBUTES_PREFIX + attribute);
+        List<String> values = (List<String>) context.getContextData().get(Constants.USER_ATTRIBUTES_PREFIX + attribute);
         if (values == null && current != null) {
-       		user.removeAttribute(attribute);
+               user.removeAttribute(attribute);
         } else if (current != null) {
-     		user.setAttribute(attribute, values);
+             user.setAttribute(attribute, values);
         }
-	}
+    }
 }
